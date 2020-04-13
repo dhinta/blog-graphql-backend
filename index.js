@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import apolloServerExpress from "apollo-server-express";
 
-import User from "./src/users/index.js";
+import User from "./src/app/users/index.js";
 
 const { ApolloServer, gql } = apolloServerExpress;
 
