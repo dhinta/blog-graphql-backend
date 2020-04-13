@@ -15,18 +15,18 @@ const Model = {
       return "Error Processing data";
     }
   },
-  async authenticate(email, password) {
+  async authenticate(args) {
     const user = await UserModel.findOne({
-      email: email,
+      email: args.email
     });
     const passwordHash = crypto
-      .pbkdf2Sync(password, user.salt, 100, 64, `sha512`)
+      .pbkdf2Sync(args.password, user.salt, 100, 64, 'sha512')
       .toString(`hex`);
 
-    if (passwordHash === user.hash) {
+    if (passwordHash === user.password) {
       return { user: user, errors: null };
     } else {
-      return { user: null, errors: [{type: 'VALIsxlksjld', message: 'Invalid credentials'}] };
+      return { user: null, errors: [{type: 'ValidationError', message: 'Invalid credentials'}] };
     }
   },
   async get(id = null) {
