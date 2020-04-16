@@ -9,34 +9,45 @@ const Model = {
   async all() {
     try {
       const users = await UserModel.find({});
-      return users;
+      return { user: users, success: true, messages: [] };
     } catch (e) {
-      console.log(e);
-      return "Error Processing data";
+      return {
+        users: null,
+        success: false,
+        messages: [{ type: "ERROR", message: e.message }],
+      };
     }
   },
   async authenticate(args) {
     const user = await UserModel.findOne({
-      email: args.email
+      email: args.email,
     });
-    const passwordHash = crypto
-      .pbkdf2Sync(args.password, user.salt, 100, 64, 'sha512')
-      .toString(`hex`);
 
-    if (passwordHash === user.password) {
-      return { user: user, errors: null };
+    if (user && passwordHash === user.password) {
+      const passwordHash = crypto
+        .pbkdf2Sync(args.password, user.salt, 100, 64, "sha512")
+        .toString(`hex`);
+
+      return { user: user, success: true, messages: [] };
     } else {
-      return { user: null, errors: [{type: 'ValidationError', message: 'Invalid credentials'}] };
+      return {
+        user: null,
+        success: true,
+        messages: [{ type: "ERROR", message: "Invalid credentials" }],
+      };
     }
   },
   async get(id = null) {
     if (id) {
       try {
         const user = await UserModel.findById(id);
-        return user;
+        return { user: user, success: true, messages: [] };
       } catch (e) {
-        console.log(e);
-        return "Error Processing data";
+        return {
+          user: null,
+          success: false,
+          messages: [{ type: "ERROR", message: e.message }],
+        };
       }
     }
   },
@@ -48,18 +59,20 @@ const Model = {
       );
       if (!errors) {
         const retVal = await userDoc.save();
-        return { user: retVal, errors: null };
+        return { user: retVal, success: true, messages: [] };
       }
-      return { user: null, errors: errors };
+
+      return { user: null, success: true, messages: errors };
     } catch (err) {
       // Handle Error on a separate file
       if (err.code === 11000) {
         const fieldName = Object.keys(err.keyPattern)[0];
         return {
           user: null,
+          success: true,
           errors: [
             {
-              type: err.name,
+              type: "ERROR",
               message: `${fieldName} already exists`,
             },
           ],

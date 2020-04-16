@@ -5,39 +5,37 @@ const { gql } = apolloServerExpress;
 const typeDefs = gql`
 
   type User {
-    _id: ID!,
-    name: String!,
-    email: String!,
-    password: String!,
-    salt: String!,
-    date: String!,
+    _id: ID!
+    name: String!
+    email: String!
+    password: String!
+    salt: String!
+    date: String!
     role: String!
   }
 
   input UserInput {
-    name: String!,
-    email: String!,
-    password: String!,
+    name: String!
+    email: String!
+    password: String!
     role: String
   }
 
-  type ErrorResponse {
-    type: String!, 
-    message: String!
-  }
-
-  type UserOutput {
+  type UserResponse implements Response {
     user: User,
-    errors: [ErrorResponse!]
+    
+    success: Boolean!
+    messages: [ResponseMessage]
   }
 
   extend type Query {
-    users: [User]!
+    """ users: UserResponse! """
+    user(id: String!): UserResponse!
   }
 
   extend type Mutation {
-    authenticate(email: String!, password: String!): UserOutput!
-    createUser(user: UserInput!): UserOutput!
+    authenticate(email: String!, password: String!): UserResponse!
+    createUser(user: UserInput!): UserResponse!
   }
 `;
 

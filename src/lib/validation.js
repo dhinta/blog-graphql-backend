@@ -10,7 +10,7 @@ class ValidationHandler {
     if (errorKeys.length) {
       for (let count = 0; count < errorKeys.length; count++) {
         errData.push({
-          type: errorObj.errors[errorKeys[count]].name,
+          type: 'ERROR',
           message: errorObj.errors[errorKeys[count]].message,
         });
       }

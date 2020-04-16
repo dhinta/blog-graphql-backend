@@ -2,8 +2,12 @@ import Model from "./model.js";
 
 const resolvers = {
   Query: {
-    users: async () => {
-      const data = await Model.all();
+    // users: async () => {
+    //   const data = await Model.all();
+    //   return data;
+    // },
+    user: async (parent, arg) => {
+      const data = await Model.get(arg.id);
       return data;
     },
   },
