@@ -2,7 +2,9 @@ import Model from "./model.js";
 
 const resolvers = {
   Query: {
-    blogs: async () => {
+    blogs: async (parent, args, context) => {
+      
+      console.log(context)
       const data = await Model.all();
       return data;
     },

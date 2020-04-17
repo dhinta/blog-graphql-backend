@@ -23,7 +23,13 @@ const typeDefs = gql`
 
   type UserResponse implements Response {
     user: User,
-    
+
+    success: Boolean!
+    messages: [ResponseMessage]
+  }
+
+  type AuthenticationResponse implements Response {
+    token: String!
     success: Boolean!
     messages: [ResponseMessage]
   }
@@ -34,7 +40,7 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    authenticate(email: String!, password: String!): UserResponse!
+    authenticate(email: String!, password: String!): AuthenticationResponse!
     createUser(user: UserInput!): UserResponse!
   }
 `;

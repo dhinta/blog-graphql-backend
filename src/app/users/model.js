@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import crypto from "crypto";
 import * as Schema from "./schema.js";
 import validationHandler from "../../lib/validation.js";
+import Util from "../../lib/util.js";
 
 const UserModel = mongoose.model("User");
 
@@ -23,15 +24,24 @@ const Model = {
       email: args.email,
     });
 
-    if (user && passwordHash === user.password) {
+    if (user) {
       const passwordHash = crypto
         .pbkdf2Sync(args.password, user.salt, 100, 64, "sha512")
         .toString(`hex`);
 
-      return { user: user, success: true, messages: [] };
+      if (user && passwordHash === user.password) {
+        const token = await Util.generateToken(user);
+        return { token: token, success: true, messages: [] };
+      } else {
+        return {
+          token: "",
+          success: true,
+          messages: [{ type: "ERROR", message: "Invalid credentials" }],
+        };
+      }
     } else {
       return {
-        user: null,
+        token: "",
         success: true,
         messages: [{ type: "ERROR", message: "Invalid credentials" }],
       };

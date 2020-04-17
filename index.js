@@ -5,16 +5,17 @@ import apolloServerExpress from "apollo-server-express";
 import User from "./src/app/users/index.js";
 import Blog from "./src/app/blogs/index.js";
 
+import Util from "./src/lib/util.js";
+
 const { ApolloServer, gql } = apolloServerExpress;
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
-
   type Query
   type Mutation
 
   enum AllowedResponseMessageType {
-    ERROR,
+    ERROR
     SUCCESS
   }
 
@@ -32,6 +33,19 @@ const typeDefs = gql`
 const server = new ApolloServer({
   typeDefs: [typeDefs, User.typeDefs, Blog.typeDefs],
   resolvers: [User.resolvers, Blog.resolvers],
+  logger: 'debug',
+  context: async ({ req }) => {
+    const user = req.headers.authorization
+      ? await Util.verifyToken(req.headers.authorization)
+      : null;
+    
+    if(user) {
+      return {
+        token: req.headers.authorization,
+        currentUser: user
+      };
+    }
+  },
 });
 
 const app = express();

@@ -1,4 +1,5 @@
 import Model from "./model.js";
+import Util from '../../lib/util.js'
 
 const resolvers = {
   Query: {
@@ -6,10 +7,10 @@ const resolvers = {
     //   const data = await Model.all();
     //   return data;
     // },
-    user: async (parent, arg) => {
+    user: Util.authenticated(async (parent, arg) => {
       const data = await Model.get(arg.id);
       return data;
-    },
+    }),
   },
   Mutation: {
     createUser: async (parent, arg) => {
@@ -18,8 +19,8 @@ const resolvers = {
       });
       return data;
     },
-    authenticate: async (parent, email, password) => {
-      const data = await Model.authenticate(email, password);
+    authenticate: async (parent, args) => {
+      const data = await Model.authenticate(args.email, args.password);
       return data;
     }
   }
