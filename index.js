@@ -21,7 +21,7 @@ const typeDefs = gql`
 
   interface Response {
     success: Boolean!
-    messages: [ResponseMessage]
+    errors: [ResponseMessage]
   }
 
   type ResponseMessage {

@@ -25,19 +25,19 @@ const typeDefs = gql`
     blog: Blog
 
     success: Boolean!
-    messages: [ResponseMessage]
+    errors: [ResponseMessage]
   }
 
   type BlogListResponse implements Response {
     blogs: [Blog!]!
 
     success: Boolean!
-    messages: [ResponseMessage]
+    errors: [ResponseMessage]
   }
 
   type BlogDeleteResponse implements Response {
     success: Boolean!
-    messages: [ResponseMessage]
+    errors: [ResponseMessage]
   }
 
   extend type Query {

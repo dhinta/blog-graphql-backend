@@ -1,4 +1,7 @@
 import jwt from "jsonwebtoken";
+import apolloServerExpress from "apollo-server-express";
+
+const { AuthenticationError } = apolloServerExpress;
 
 class Util {
   static async generateToken(user) {
@@ -27,11 +30,18 @@ class Util {
     }
   }
 
-  static authenticated = next => (root, args, context, info) => {
+  static authenticated = (next) => (root, args, context, info) => {
     if (!context.currentUser) {
-        throw new Error(`Unauthenticated!`);
+      const error = new AuthenticationError("You must login to continue");
+      return {
+        errors: [{
+          type: 'ERROR',
+          message: error.message
+        }],
+        success: false
+      }
     }
-  
+
     return next(root, args, context, info);
   };
 }

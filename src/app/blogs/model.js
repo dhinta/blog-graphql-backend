@@ -9,13 +9,13 @@ const Model = {
     try {
       const blogs = await BlogModel.find({});
 
-      return { blogs: blogs, success: true, messages: [] };
+      return { blogs: blogs, success: true, errors: [] };
     } catch (e) {
       console.log(e);
       return {
         blogs: null,
         success: false,
-        messages: [
+        errors: [
           {
             type: "ERROR",
             message: e.message,
@@ -28,13 +28,13 @@ const Model = {
     if (id) {
       try {
         const blog = await BlogModel.findById(id);
-        return { blog: blog, success: true, messages: [] };
+        return { blog: blog, success: true, errors: [] };
       } catch (e) {
         console.log(e);
         return {
           blog: null,
           success: false,
-          messages: [
+          errors: [
             {
               type: "ERROR",
               message: e.message,
@@ -52,16 +52,16 @@ const Model = {
       );
       if (!errors) {
         const retVal = await blogDoc.save();
-        return { blog: retVal, success: true, messages: [] };
+        return { blog: retVal, success: true, errors: [] };
       }
-      return { blog: null, success: false, messages: errors };
+      return { blog: null, success: false, errors: errors };
     } catch (err) {
       // Handle Error on a separate file
       console.log(err);
       return {
         blog: null,
         success: false,
-        messages: [
+        errors: [
           {
             type: "ERROR",
             message: err.message,
@@ -84,13 +84,13 @@ const Model = {
       return {
         blog: blog,
         success: true,
-        messages: [],
+        errors: [],
       };
     } catch (err) {
       return {
         blog: null,
         success: false,
-        messages: [
+        errors: [
           {
             type: "ERROR",
             message: err.message,
@@ -107,7 +107,7 @@ const Model = {
       return {
         blog: blog,
         success: true,
-        messages: [
+        errors: [
           {
             type: "SUCCESS",
             message: "Successfully Deleted",
@@ -119,7 +119,7 @@ const Model = {
       return {
         blog: null,
         success: false,
-        messages: [
+        errors: [
           {
             type: "ERROR",
             message: err.message,

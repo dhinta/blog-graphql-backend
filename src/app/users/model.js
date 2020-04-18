@@ -10,40 +10,40 @@ const Model = {
   async all() {
     try {
       const users = await UserModel.find({});
-      return { user: users, success: true, messages: [] };
+      return { user: users, success: true, errors: [] };
     } catch (e) {
       return {
         users: null,
         success: false,
-        messages: [{ type: "ERROR", message: e.message }],
+        errors: [{ type: "ERROR", message: e.message }],
       };
     }
   },
-  async authenticate(args) {
+  async authenticate(email, password) {
     const user = await UserModel.findOne({
-      email: args.email,
+      email: email,
     });
 
     if (user) {
       const passwordHash = crypto
-        .pbkdf2Sync(args.password, user.salt, 100, 64, "sha512")
+        .pbkdf2Sync(password, user.salt, 100, 64, "sha512")
         .toString(`hex`);
 
       if (user && passwordHash === user.password) {
         const token = await Util.generateToken(user);
-        return { token: token, success: true, messages: [] };
+        return { token: token, success: true, errors: [] };
       } else {
         return {
           token: "",
-          success: true,
-          messages: [{ type: "ERROR", message: "Invalid credentials" }],
+          success: false,
+          errors: [{ type: "ERROR", message: "Invalid credentials" }],
         };
       }
     } else {
       return {
         token: "",
-        success: true,
-        messages: [{ type: "ERROR", message: "Invalid credentials" }],
+        success: false,
+        errors: [{ type: "ERROR", message: "Invalid credentials" }],
       };
     }
   },
@@ -51,12 +51,12 @@ const Model = {
     if (id) {
       try {
         const user = await UserModel.findById(id);
-        return { user: user, success: true, messages: [] };
+        return { user: user, success: true, errors: [] };
       } catch (e) {
         return {
           user: null,
           success: false,
-          messages: [{ type: "ERROR", message: e.message }],
+          errors: [{ type: "ERROR", message: e.message }],
         };
       }
     }
@@ -69,17 +69,17 @@ const Model = {
       );
       if (!errors) {
         const retVal = await userDoc.save();
-        return { user: retVal, success: true, messages: [] };
+        return { user: retVal, success: true, errors: [] };
       }
 
-      return { user: null, success: true, messages: errors };
+      return { user: null, success: false, errors: errors };
     } catch (err) {
       // Handle Error on a separate file
       if (err.code === 11000) {
         const fieldName = Object.keys(err.keyPattern)[0];
         return {
           user: null,
-          success: true,
+          success: false,
           errors: [
             {
               type: "ERROR",

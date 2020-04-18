@@ -25,13 +25,13 @@ const typeDefs = gql`
     user: User,
 
     success: Boolean!
-    messages: [ResponseMessage]
+    errors: [ResponseMessage]
   }
 
   type AuthenticationResponse implements Response {
     token: String!
     success: Boolean!
-    messages: [ResponseMessage]
+    errors: [ResponseMessage]
   }
 
   extend type Query {
