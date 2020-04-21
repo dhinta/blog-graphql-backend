@@ -11,6 +11,10 @@ const resolvers = {
       const data = await Model.get(arg.id);
       return data;
     }),
+    getLoggedInUserInfo: Util.authenticated(async (parent, arg, context) => {
+      const data = await Model.get(context.currentUser.id);
+      return data;
+    })
   },
   Mutation: {
     createUser: Util.authenticated(async (parent, arg) => {

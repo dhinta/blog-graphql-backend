@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import apolloServerExpress from "apollo-server-express";
+import cors from "cors";
 
 import User from "./src/app/users/index.js";
 import Blog from "./src/app/blogs/index.js";
@@ -33,22 +34,35 @@ const typeDefs = gql`
 const server = new ApolloServer({
   typeDefs: [typeDefs, User.typeDefs, Blog.typeDefs],
   resolvers: [User.resolvers, Blog.resolvers],
-  logger: 'debug',
+  logger: "debug",
   context: async ({ req }) => {
     const user = req.headers.authorization
       ? await Util.verifyToken(req.headers.authorization)
       : null;
-    
-    if(user) {
+
+    if (user) {
       return {
         token: req.headers.authorization,
-        currentUser: user
+        currentUser: user,
       };
     }
   },
 });
 
 const app = express();
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (['http://localhost:4200', 'http://localhost:3000'].indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+
 server.applyMiddleware({ app });
 
 app.get("/", (req, res) => res.status(401).end());

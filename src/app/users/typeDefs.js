@@ -37,6 +37,7 @@ const typeDefs = gql`
   extend type Query {
     """ users: UserResponse! """
     user(id: String!): UserResponse!
+    getLoggedInUserInfo: UserResponse!
   }
 
   extend type Mutation {
