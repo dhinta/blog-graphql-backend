@@ -51,17 +51,7 @@ const server = new ApolloServer({
 
 const app = express();
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (['http://localhost:4200', 'http://localhost:3000'].indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  })
-);
+app.use(cors());
 
 server.applyMiddleware({ app });
 

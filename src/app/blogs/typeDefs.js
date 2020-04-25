@@ -18,7 +18,6 @@ const typeDefs = gql`
   input BlogInput {
     topic: String!
     details: String!
-    createdBy: String!
   }
 
   type BlogResponse implements Response {
@@ -41,8 +40,9 @@ const typeDefs = gql`
   }
 
   extend type Query {
-    blogs: BlogListResponse!
+    blogs(createdby: String): BlogListResponse!
     blog(id: String!): BlogResponse!
+    userBlogs: BlogListResponse!
   }
 
   extend type Mutation {
@@ -51,5 +51,4 @@ const typeDefs = gql`
     deleteBlog(id: String!): BlogDeleteResponse!
   }
 `;
-
 export default typeDefs;

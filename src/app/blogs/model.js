@@ -5,13 +5,14 @@ import validationHandler from "../../lib/validation.js";
 const BlogModel = mongoose.model("Blog");
 
 const Model = {
-  async all() {
+  async all(createdBy = null) {
     try {
-      const blogs = await BlogModel.find({});
+      const blogs = createdBy
+        ? await BlogModel.find({ createdBy: createdBy }).sort('-date')
+        : await BlogModel.find({}).sort('-date');
 
       return { blogs: blogs, success: true, errors: [] };
     } catch (e) {
-      console.log(e);
       return {
         blogs: null,
         success: false,
