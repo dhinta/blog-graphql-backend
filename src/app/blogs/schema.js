@@ -22,4 +22,24 @@ const blogSchema = new Schema({
   },
 });
 
+const commentSchema = new Schema({
+  comment: {
+    type: String,
+    required: [true, 'Comment is missing']
+  },
+  blogId: {
+    type: String,
+    required: [true, 'blogId is missing']
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  postedBy: {
+    type: String,
+    required: [true, 'Who is the commentor']
+  },
+});
+
 mongoose.model("Blog", blogSchema);
+mongoose.model("Comment", commentSchema);

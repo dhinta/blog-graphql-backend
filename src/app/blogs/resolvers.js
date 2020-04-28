@@ -32,7 +32,16 @@ const resolvers = {
     deleteBlog: Util.authenticated(async (parent, arg) => {
       const data = await Model.delete(arg.id);
       return data;
-    })
+    }),
+    createComment:  Util.authenticated(async (parent, arg, context) => {
+      const input = {
+        ...arg.comment,
+        postedBy: context.currentUser.id
+      };
+      console.log(input);
+      const data = await Model.postComment(input);
+      return data;
+    }),
   },
 };
 

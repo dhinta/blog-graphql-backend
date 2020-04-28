@@ -13,6 +13,14 @@ const typeDefs = gql`
     details: String!
     date: String!
     createdBy: String!
+    comments: [Comment!]!
+  }
+
+  type Comment {
+    _id: ID!
+    comment: String!
+    date: String!
+    postedBy: String!
   }
 
   input BlogInput {
@@ -20,8 +28,19 @@ const typeDefs = gql`
     details: String!
   }
 
+  input CommentInput {
+    comment: String!
+    blogId: String!
+  }
+
   type BlogResponse implements Response {
     blog: Blog
+
+    success: Boolean!
+    errors: [ResponseMessage]
+  }
+
+  type CommentResponse implements Response {
 
     success: Boolean!
     errors: [ResponseMessage]
@@ -49,6 +68,8 @@ const typeDefs = gql`
     createBlog(blog: BlogInput!): BlogResponse!
     updateBlog(id: String!, blog: BlogInput!): BlogResponse!
     deleteBlog(id: String!): BlogDeleteResponse!
+
+    createComment(comment: CommentInput!): CommentResponse!
   }
 `;
 export default typeDefs;
