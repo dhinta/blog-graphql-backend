@@ -66,7 +66,7 @@ const run = async () => {
   try {
     const connect = await mongoose.connect(process.env.MONGO_CONNECTION_URI);
     app.listen({ port: process.env.PORT || 3000 }, () =>
-      console.log(`Server ready at http://localhost:3000${server.graphqlPath}`)
+      console.log(`Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`)
     );
   } catch (e) {
     console.log(e);

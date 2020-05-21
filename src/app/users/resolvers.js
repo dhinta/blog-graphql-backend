@@ -17,12 +17,12 @@ const resolvers = {
     })
   },
   Mutation: {
-    createUser: Util.authenticated(async (parent, arg) => {
+    createUser: async (parent, arg) => {
       const data = await Model.save({
         ...arg.user,
       });
       return data;
-    }),
+    },
     authenticate: async (parent, args) => {
       const data = await Model.authenticate(args.email, args.password);
       return data;
