@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config index.js",
+    "start": "node index.js",
     "debug": "node --inspect -r dotenv/config index.js",
     "server": "node -r dotenv/config index.js"
   },
