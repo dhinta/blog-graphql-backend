@@ -29,7 +29,7 @@
     "gql-merge": "0.0.6",
     "graphql": "^15.0.0",
     "graphql-tools": "^4.0.7",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.9.7"
   },
   "devDependencies": {
